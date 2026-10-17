@@ -1,0 +1,27 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # Dealer endpoints
+    path('dealers/', views.get_dealers, name='get_dealers'),
+    path('dealer/<int:dealer_id>/', views.get_dealer_by_id, name='get_dealer_by_id'),
+    path('dealers/<str:state>/', views.get_dealers_by_state, name='get_dealers_by_state'),
+
+    # Review endpoints
+    path('dealer/<int:dealer_id>/reviews/', views.get_dealer_reviews, name='get_dealer_reviews'),
+    path('review/', views.add_review, name='add_review'),
+    path('analyze/', views.analyze_review, name='analyze_review'),
+
+    # Car endpoints
+    path('car_makes/', views.get_car_makes, name='get_car_makes'),
+
+    # Authentication endpoints
+    path('login/', views.login_user, name='login_user'),
+    path('logout/', views.logout_user, name='logout_user'),
+    path('register/', views.register_user, name='register_user'),
+
+    # Static pages
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
+    path('', views.index, name='index'),
+]

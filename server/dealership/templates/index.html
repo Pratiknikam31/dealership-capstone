@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars Dealership - Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Cars Dealership</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/api/about/">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="/api/contact/">Contact Us</a></li>
+                <li class="nav-item" id="login-nav"><a class="nav-link" href="#" onclick="showLoginModal()">Login</a></li>
+                <li class="nav-item" id="register-nav"><a class="nav-link" href="#" onclick="showRegisterModal()">Sign Up</a></li>
+                <li class="nav-item d-none" id="logout-nav"><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
+                <li class="nav-item d-none" id="user-nav"><span class="nav-link" id="username-display"></span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Welcome to Cars Dealership</h1>
+        <p class="text-center">Find your perfect car from our nationwide network of trusted dealerships</p>
+
+        <div class="mb-4">
+            <div class="form-group">
+                <label for="state-filter">Filter by State:</label>
+                <select class="form-control" id="state-filter" onchange="filterDealers()">
+                    <option value="">All States</option>
+                    <option value="California">California</option>
+                    <option value="Texas">Texas</option>
+                    <option value="New York">New York</option>
+                    <option value="Florida">Florida</option>
+                    <option value="Kansas">Kansas</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="dealers-container" class="row">
+            <div class="col-12 text-center">
+                <p>Loading dealers...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" id="login-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sign Up</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" id="reg-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" id="reg-firstname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" id="reg-lastname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="reg-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" id="reg-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dealer Details Modal -->
+    <div class="modal fade" id="dealerModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dealer-modal-title">Dealer Details</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="dealer-modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Post a Review</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="review-form">
+                        <input type="hidden" id="review-dealer-id">
+                        <div class="form-group">
+                            <label>Your Name</label>
+                            <input type="text" class="form-control" id="review-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Did you purchase from this dealer?</label>
+                            <select class="form-control" id="review-purchase">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Review</label>
+                            <textarea class="form-control" id="review-text" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Purchase Date (optional)</label>
+                            <input type="date" class="form-control" id="review-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Car Make (optional)</label>
+                            <input type="text" class="form-control" id="review-make">
+                        </div>
+                        <div class="form-group">
+                            <label>Car Model (optional)</label>
+                            <input type="text" class="form-control" id="review-model">
+                        </div>
+                        <div class="form-group">
+                            <label>Car Year (optional)</label>
+                            <input type="number" class="form-control" id="review-year">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2024 Cars Dealership. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        let currentUser = null;
+
+        function loadDealers(state = '') {
+            const url = state ? `/api/dealers/${state}/` : '/api/dealers/';
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('dealers-container');
+                    if (data.length === 0) {
+                        container.innerHTML = '<div class="col-12 text-center"><p>No dealers found.</p></div>';
+                        return;
+                    }
+                    container.innerHTML = data.map(dealer => `
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${dealer.full_name}</h5>
+                                    <p class="card-text"><strong>City:</strong> ${dealer.city}</p>
+                                    <p class="card-text"><strong>State:</strong> ${dealer.state}</p>
+                                    <p class="card-text"><strong>Address:</strong> ${dealer.address}</p>
+                                    <button class="btn btn-primary btn-sm" onclick="showDealerDetails(${dealer.id})">View Details</button>
+                                    ${currentUser ? `<button class="btn btn-success btn-sm ml-2" onclick="showReviewModal(${dealer.id})">Review Dealer</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => console.error('Error loading dealers:', error));
+        }
+
+        function filterDealers() {
+            const state = document.getElementById('state-filter').value;
+            loadDealers(state);
+        }
+
+        function showDealerDetails(dealerId) {
+            fetch(`/api/dealer/${dealerId}/`)
+                .then(response => response.json())
+                .then(dealer => {
+                    document.getElementById('dealer-modal-title').textContent = dealer.full_name;
+                    document.getElementById('dealer-modal-body').innerHTML = `
+                        <p><strong>Full Name:</strong> ${dealer.full_name}</p>
+                        <p><strong>City:</strong> ${dealer.city}</p>
+                        <p><strong>State:</strong> ${dealer.state}</p>
+                        <p><strong>Address:</strong> ${dealer.address}</p>
+                        <p><strong>Zip:</strong> ${dealer.zip}</p>
+                        <p><strong>Latitude:</strong> ${dealer.lat}</p>
+                        <p><strong>Longitude:</strong> ${dealer.long}</p>
+                        <hr>
+                        <h5>Reviews</h5>
+                        <div id="reviews-list">Loading reviews...</div>
+                    `;
+                    $('#dealerModal').modal('show');
+                    loadReviews(dealerId);
+                })
+                .catch(error => console.error('Error loading dealer:', error));
+        }
+
+        function loadReviews(dealerId) {
+            fetch(`/api/dealer/${dealerId}/reviews/`)
+                .then(response => response.json())
+                .then(reviews => {
+                    const reviewsList = document.getElementById('reviews-list');
+                    if (reviews.length === 0) {
+                        reviewsList.innerHTML = '<p>No reviews yet.</p>';
+                        return;
+                    }
+                    reviewsList.innerHTML = reviews.map(review => `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">${review.name}</h6>
+                                <p class="card-text">${review.review}</p>
+                                <small class="text-muted">Sentiment: ${review.sentiment || 'N/A'}</small>
+                            </div>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => console.error('Error loading reviews:', error));
+        }
+
+        function showLoginModal() {
+            $('#loginModal').modal('show');
+        }
+
+        function showRegisterModal() {
+            $('#registerModal').modal('show');
+        }
+
+        function showReviewModal(dealerId) {
+            document.getElementById('review-dealer-id').value = dealerId;
+            $('#reviewModal').modal('show');
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            fetch('/api/login/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.user) {
+                    currentUser = data.user;
+                    document.getElementById('username-display').textContent = `Welcome, ${currentUser.username}`;
+                    document.getElementById('login-nav').classList.add('d-none');
+                    document.getElementById('register-nav').classList.add('d-none');
+                    document.getElementById('logout-nav').classList.remove('d-none');
+                    document.getElementById('user-nav').classList.remove('d-none');
+                    $('#loginModal').modal('hide');
+                    loadDealers();
+                } else {
+                    alert('Login failed');
+                }
+            })
+            .catch(error => console.error('Error logging in:', error));
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                username: document.getElementById('reg-username').value,
+                first_name: document.getElementById('reg-firstname').value,
+                last_name: document.getElementById('reg-lastname').value,
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-password').value
+            };
+
+            fetch('/api/register/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.user) {
+                    alert('Registration successful! Please login.');
+                    $('#registerModal').modal('hide');
+                } else {
+                    alert('Registration failed');
+                }
+            })
+            .catch(error => console.error('Error registering:', error));
+        });
+
+        document.getElementById('review-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                dealership: parseInt(document.getElementById('review-dealer-id').value),
+                name: document.getElementById('review-name').value,
+                purchase: document.getElementById('review-purchase').value === 'true',
+                review: document.getElementById('review-text').value,
+                purchase_date: document.getElementById('review-date').value || null,
+                car_make: document.getElementById('review-make').value || '',
+                car_model: document.getElementById('review-model').value || '',
+                car_year: document.getElementById('review-year').value ? parseInt(document.getElementById('review-year').value) : null
+            };
+
+            fetch('/api/review/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Review submitted successfully!');
+                $('#reviewModal').modal('hide');
+                document.getElementById('review-form').reset();
+            })
+            .catch(error => console.error('Error submitting review:', error));
+        });
+
+        function logout() {
+            fetch('/api/logout/', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    currentUser = null;
+                    document.getElementById('login-nav').classList.remove('d-none');
+                    document.getElementById('register-nav').classList.remove('d-none');
+                    document.getElementById('logout-nav').classList.add('d-none');
+                    document.getElementById('user-nav').classList.add('d-none');
+                    loadDealers();
+                })
+                .catch(error => console.error('Error logging out:', error));
+        }
+
+        // Load dealers on page load
+        loadDealers();
+    </script>
+</body>
+</html>

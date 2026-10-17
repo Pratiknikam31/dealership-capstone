@@ -1,0 +1,4 @@
+curl -X POST http://localhost:8000/api/login/ -H "Content-Type: application/json" -d "{\"username\": \"root\", \"password\": \"root123\"}"
+
+Output:
+{"status":"Logged in","user":{"id":1,"username":"root","first_name":"","last_name":"","email":"root@example.com"}}

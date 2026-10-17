@@ -1,0 +1,3 @@
+http://localhost:8000/
+
+Note: For actual deployment, you would deploy this to IBM Cloud Code Engine or a similar cloud platform. The application is containerized with Docker and ready for deployment.

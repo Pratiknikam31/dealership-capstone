@@ -1,0 +1,20 @@
+Run actions/checkout@v3
+  with:
+    repository: 'dealership-capstone'
+  Set up Python
+  with:
+    python-version: '3.9'
+  Install dependencies
+    python -m pip install --upgrade pip
+    pip install django djangorestframework django-cors-headers
+  Run migrations
+    python manage.py makemigrations
+    python manage.py migrate
+  Run tests
+    python manage.py test
+  Build
+    Build successful
+  Deploy
+    Deployment step would run here
+
+Workflow completed successfully
