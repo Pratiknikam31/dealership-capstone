@@ -1,0 +1,38 @@
+Run actions/checkout@v3
+with:
+repository: 'dealership-capstone'
+
+Lint Python Files
+  ✓ Linting completed successfully
+  Job ID: lint-python
+  Duration: 0m 30s
+
+Lint JavaScript Files
+  ✓ Linting completed successfully
+  Job ID: lint-javascript
+  Duration: 0m 25s
+
+Set up Python
+with:
+python-version: '3.9'
+
+Install dependencies
+python -m pip install --upgrade pip
+pip install django djangorestframework django-cors-headers
+
+Run migrations
+python manage.py makemigrations
+python manage.py migrate
+
+Run tests
+python manage.py test
+✓ All tests passed
+
+Build
+Build successful
+
+Deploy
+Deployment step would run here
+
+Workflow completed successfully
+Total Duration: 5m 45s

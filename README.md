@@ -1,4 +1,10 @@
-# Cars Dealership Capstone Project
+# dealership-capstone
+
+## Repository Name
+dealership-capstone
+
+## Project Name
+Cars Dealership Capstone Project
 
 ## Project Overview
 Cars Dealership is a national car retailer in the United States. This full-stack web application allows users to view dealership branches, filter dealers by state, read and submit reviews, and access information about car makes and models.

@@ -43,6 +43,7 @@ const Register = () => {
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
+                            placeholder="Username"
                             required
                         />
                     </div>
@@ -54,6 +55,7 @@ const Register = () => {
                             name="first_name"
                             value={formData.first_name}
                             onChange={handleChange}
+                            placeholder="First Name"
                             required
                         />
                     </div>
@@ -65,6 +67,7 @@ const Register = () => {
                             name="last_name"
                             value={formData.last_name}
                             onChange={handleChange}
+                            placeholder="Last Name"
                             required
                         />
                     </div>
@@ -76,6 +79,7 @@ const Register = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
+                            placeholder="Email"
                             required
                         />
                     </div>
@@ -87,6 +91,7 @@ const Register = () => {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
+                            placeholder="Password"
                             required
                         />
                     </div>

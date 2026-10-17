@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -48,6 +48,31 @@ def get_dealers_by_state(request, state):
     serializer = DealerSerializer(dealers, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def fetch_dealer(request, dealer_id):
+    try:
+        dealer = Dealer.objects.get(id=dealer_id)
+        serializer = DealerSerializer(dealer)
+        data = serializer.data
+        # Remove 'st' field as per requirement
+        if 'st' in data:
+            del data['st']
+        return Response(data)
+    except Dealer.DoesNotExist:
+        return Response({'error': 'Dealer not found'}, status=404)
+
+@api_view(['GET'])
+def fetch_dealers_by_state(request, state):
+    dealers = Dealer.objects.filter(state=state)
+    serializer = DealerSerializer(dealers, many=True)
+    data = serializer.data
+    # Add _id field and remove st field
+    for dealer in data:
+        dealer['_id'] = dealer['id']
+        if 'st' in dealer:
+            del dealer['st']
+    return Response(data)
+
 # Review endpoints
 @api_view(['GET'])
 def get_dealer_reviews(request, dealer_id):
@@ -67,10 +92,13 @@ def add_review(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def analyze_review(request):
-    data = json.loads(request.body)
-    text = data.get('review', '')
+    if request.method == 'GET':
+        text = request.GET.get('review', '')
+    else:
+        data = json.loads(request.body)
+        text = data.get('review', '')
     sentiment = analyze_sentiment(text)
     return Response({'sentiment': sentiment})
 
@@ -78,10 +106,30 @@ def analyze_review(request):
 @api_view(['GET'])
 def get_car_makes(request):
     car_makes = CarMake.objects.all()
-    serializer = CarMakeSerializer(car_makes, many=True)
-    return Response(serializer.data)
+    result = []
+    for make in car_makes:
+        make_data = {
+            'id': make.id,
+            'name': make.name,
+            'description': make.description,
+            'models': []
+        }
+        car_models = CarModel.objects.filter(car_make=make)
+        for model in car_models:
+            make_data['models'].append({
+                'id': model.id,
+                'name': model.name,
+                'year': model.year
+            })
+        result.append(make_data)
+    return Response(result)
 
 # Authentication endpoints
+@api_view(['GET'])
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return Response({'csrfToken': 'CSRF cookie set'})
+
 @api_view(['POST'])
 @csrf_exempt
 def login_user(request):
@@ -97,9 +145,26 @@ def login_user(request):
 
 @api_view(['POST'])
 @csrf_exempt
+def djangoapp_login(request):
+    data = json.loads(request.body)
+    username = data.get('userName')
+    password = data.get('password')
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return Response({'userName': username, 'status': 'Authenticated'})
+    return Response({'error': 'Invalid credentials'}, status=401)
+
+@api_view(['POST'])
+@csrf_exempt
 def logout_user(request):
     logout(request)
     return Response({'status': 'Logged out'})
+
+@api_view(['GET'])
+def djangoapp_logout(request):
+    logout(request)
+    return Response({'userName': '', 'status': 'Logged out'})
 
 @api_view(['POST'])
 @csrf_exempt

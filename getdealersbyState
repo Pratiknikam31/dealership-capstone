@@ -1,4 +1,4 @@
-curl http://localhost:8000/api/dealers/Kansas/
+curl http://localhost:8000/api/fetchDealers/Kansas
 
 Output:
-[{"id":5,"full_name":"Cars Dealership Kansas City","city":"Kansas City","address":"555 Main Street","zip":"64111","state":"Kansas","lat":39.0997,"long":-94.5786,"short_name":"KC Dealer","st":"KS"}]
+[{"_id":17,"id":17,"full_name":"Cars Dealership Kansas City","city":"Kansas City","address":"555 Main Street","zip":"64111","state":"Kansas","lat":39.0997,"long":-94.5786,"short_name":"KC Dealer"},{"_id":18,"id":18,"full_name":"Cars Dealership Wichita","city":"Wichita","address":"123 Douglas Ave","zip":"67202","state":"Kansas","lat":37.6872,"long":-97.3301,"short_name":"Wichita Dealer"}]
