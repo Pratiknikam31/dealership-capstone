@@ -1,4 +1,4 @@
-curl http://localhost:8000/api/fetchDealer/1/
+curl -X GET http://localhost:8000/api/fetchDealer/1
 
 Output:
-{"id":1,"full_name":"Cars Dealership New York","city":"New York City","address":"123 Broadway, Manhattan","zip":"10001","state":"New York","lat":40.758,"long":-73.9855,"short_name":"NYC Dealer"}
+{"_id":"1","id":1,"city":"New York City","state":"New York","address":"123 Broadway, Manhattan","zip":"10001","lat":40.758,"long":-73.9855,"short_name":"NYC Dealer","full_name":"Cars Dealership New York"}

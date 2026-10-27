@@ -1,38 +1,25 @@
-Run actions/checkout@v3
-with:
-repository: 'dealership-capstone'
+gh run view 18836357268 --verbose
 
-Lint Python Files
-  ✓ Linting completed successfully
-  Job ID: lint-python
-  Duration: 0m 30s
+✓ main Lint Code · 18836357268
+Triggered via push about 7 minutes ago
 
-Lint JavaScript Files
-  ✓ Linting completed successfully
-  Job ID: lint-javascript
-  Duration: 0m 25s
-
-Set up Python
-with:
-python-version: '3.9'
-
-Install dependencies
-python -m pip install --upgrade pip
-pip install django djangorestframework django-cors-headers
-
-Run migrations
-python manage.py makemigrations
-python manage.py migrate
-
-Run tests
-python manage.py test
-✓ All tests passed
-
-Build
-Build successful
-
-Deploy
-Deployment step would run here
-
-Workflow completed successfully
-Total Duration: 5m 45s
+JOBS
+✓ Lint Python Files in 16s (ID 53738140285)
+  ✓ Set up job
+  ✓ Checkout Repository
+  ✓ Set up Python
+  ✓ Install dependencies
+  ✓ Print working directory
+  ✓ Run Linter
+  ✓ Post Set up Python
+  ✓ Post Checkout Repository
+  ✓ Complete job
+✓ Lint JavaScript Files in 11s (ID 53738140290)
+  ✓ Set up job
+  ✓ Checkout Repository
+  ✓ Install Node.js
+  ✓ Install JSHint
+  ✓ Run Linter
+  ✓ Post Install Node.js
+  ✓ Post Checkout Repository
+  ✓ Complete job

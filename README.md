@@ -91,18 +91,23 @@ dealership-capstone/
 
 ### Dealer Endpoints
 - `GET /api/dealers/` - Get all dealers
+- `GET /api/fetchDealers/<state>` - Get dealers by state (with `_id`, `id`, `city`, `state`, `address`, `zip`, `lat`, `long`, `short_name`, `full_name`)
 - `GET /api/dealer/<id>/` - Get dealer by ID
-- `GET /api/dealers/<state>/` - Get dealers by state
+- `GET /api/fetchDealer/<id>/` - Get dealer by ID (MongoDB style with `_id`)
 
 ### Review Endpoints
-- `GET /api/dealer/<id>/reviews/` - Get reviews for a dealer
+- `GET /api/fetchReviews/dealer/<id>` - Get reviews for a dealer
 - `POST /api/review/` - Submit a new review
-- `POST /api/analyze/` - Analyze sentiment of review text
+- `GET /api/analyze/` - Analyze sentiment of review text (query param)
+- `GET /api/analyze/<text>` - Analyze sentiment of review text (path param)
 
 ### Car Endpoints
+- `GET /api/djangoapp/get_cars` - Get all car makes and models (returns `CarModels` array with `CarMake`/`CarModel`)
 - `GET /api/car_makes/` - Get all car makes and models
 
 ### Authentication Endpoints
+- `POST /api/djangoapp/login` - User login (accepts `userName` and `password`)
+- `GET /api/djangoapp/logout` - User logout (returns `userName` and `status`)
 - `POST /api/login/` - User login
 - `POST /api/logout/` - User logout
 - `POST /api/register/` - User registration

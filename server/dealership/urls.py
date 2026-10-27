@@ -9,12 +9,16 @@ urlpatterns = [
 
     # New endpoints for assignment requirements
     path('fetchDealer/<int:dealer_id>/', views.fetch_dealer, name='fetch_dealer'),
-    path('fetchDealers/<str:state>/', views.fetch_dealers_by_state, name='fetch_dealers_by_state'),
+    path('fetchDealers/<str:state>', views.fetch_dealers_by_state, name='fetch_dealers_by_state'),
+    path('fetchDealers/<str:state>/', views.fetch_dealers_by_state, name='fetch_dealers_by_state_slash'),
 
     # Review endpoints
     path('dealer/<int:dealer_id>/reviews/', views.get_dealer_reviews, name='get_dealer_reviews'),
+    path('fetchReviews/dealer/<int:dealer_id>', views.fetch_dealer_reviews, name='fetch_dealer_reviews'),
+    path('fetchReviews/dealer/<int:dealer_id>/', views.fetch_dealer_reviews, name='fetch_dealer_reviews_slash'),
     path('review/', views.add_review, name='add_review'),
     path('analyze/', views.analyze_review, name='analyze_review'),
+    path('analyze/<str:text>', views.analyze_review_text, name='analyze_review_text'),
 
     # Car endpoints
     path('car_makes/', views.get_car_makes, name='get_car_makes'),
@@ -28,9 +32,11 @@ urlpatterns = [
     # Django app specific endpoints for assignment
     path('djangoapp/login', views.djangoapp_login, name='djangoapp_login'),
     path('djangoapp/logout', views.djangoapp_logout, name='djangoapp_logout'),
+    path('djangoapp/get_cars', views.get_cars, name='get_cars'),
 
     # Static pages
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('', views.index, name='index'),
 ]
+
